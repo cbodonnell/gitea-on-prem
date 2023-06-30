@@ -2,9 +2,6 @@ name: App Release
 on:
   push:
     branches: [main]
-    paths:
-    - gitea/*'
-    - '.github/workflows/release.yml'
 
 jobs:
   create-release:
