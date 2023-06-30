@@ -15,19 +15,18 @@ jobs:
         cluster: [ {distribution: kind, version: v1.25.3}, {distribution: k3s, version: v1.26}]
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
-    
+    - uses: actions/checkout@v3
+
     - name: Define App Version
       shell: bash
-      # run: echo "APP_VERSION=0.1.0-${GITHUB_REF_NAME//[^a-zA-Z0-9]/}.${GITHUB_SHA::7}" >> $GITHUB_ENV
-      run: echo "APP_VERSION=0.6.0" >> $GITHUB_ENV
+      run: echo "APP_VERSION=0.0.1-${GITHUB_REF_NAME//[^a-zA-Z0-9]/}.${GITHUB_RUN_ID}${GITHUB_RUN_ATTEMPT}" >> $GITHUB_ENV
 
     - name: Package Helm Chart for Replicated
       id: package-helm-chart
       run: |
         mkdir -p manifests
         helm package ./gitea -u -d manifests \
-          --app-version=0.6.0 \
+          --app-version=0.0.1-${{ github.ref_name }} \
           --version=${{ env.APP_VERSION }}
 
     - name: Smoke Test
